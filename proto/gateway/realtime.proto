@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package messenger.gateway.v1;
+
+option go_package = "github.com/example/messenger/proto/gateway/v1;gatewayv1";
+
+import "proto/message/message.proto";
+
+service RealtimeGateway {
+  rpc Sync(stream ClientEvent) returns (stream ServerEvent);
+}
+
+message ClientEvent {
+  oneof payload {
+    AuthEvent auth = 1;
+    SendMessageEvent send_message = 2;
+    AckEvent ack = 3;
+    ResumeEvent resume = 4;
+  }
+}
+
+message ServerEvent {
+  string event_id = 1;
+  oneof payload {
+    ConnectedEvent connected = 2;
+    messenger.message.v1.Message message = 3;
+    ReceiptEvent receipt = 4;
+    ErrorEvent error = 5;
+  }
+}
+
+message AuthEvent {
+  string access_token = 1;
+  string device_id = 2;
+}
+
+message SendMessageEvent {
+  int64 chat_id = 1;
+  string client_msg_id = 2;
+  string text = 3;
+}
+
+message AckEvent {
+  string event_id = 1;
+  string server_msg_id = 2;
+  string type = 3;
+}
+
+message ResumeEvent {
+  string resume_token = 1;
+  string last_event_id = 2;
+}
+
+message ConnectedEvent {
+  string session_id = 1;
+  string resume_token = 2;
+}
+
+message ReceiptEvent {
+  int64 chat_id = 1;
+  string server_msg_id = 2;
+  string status = 3;
+}
+
+message ErrorEvent {
+  string code = 1;
+  string message = 2;
+}

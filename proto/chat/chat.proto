@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package messenger.chat.v1;
+
+option go_package = "github.com/example/messenger/proto/chat/v1;chatv1";
+
+import "proto/common/types.proto";
+
+service ChatService {
+  rpc CreateChat(CreateChatRequest) returns (CreateChatResponse);
+  rpc AddMember(AddMemberRequest) returns (messenger.common.v1.Empty);
+  rpc RemoveMember(RemoveMemberRequest) returns (messenger.common.v1.Empty);
+  rpc ListChats(ListChatsRequest) returns (ListChatsResponse);
+}
+
+message Chat {
+  int64 chat_id = 1;
+  messenger.common.v1.ChatType type = 2;
+  string title = 3;
+  int64 owner_user_id = 4;
+  messenger.common.v1.Timestamp created_at = 5;
+}
+
+message CreateChatRequest {
+  messenger.common.v1.ChatType type = 1;
+  string title = 2;
+  repeated int64 member_user_ids = 3;
+}
+
+message CreateChatResponse {
+  Chat chat = 1;
+}
+
+message AddMemberRequest {
+  int64 chat_id = 1;
+  int64 user_id = 2;
+  string role = 3;
+}
+
+message RemoveMemberRequest {
+  int64 chat_id = 1;
+  int64 user_id = 2;
+}
+
+message ListChatsRequest {
+  int64 user_id = 1;
+  messenger.common.v1.Pagination pagination = 2;
+}
+
+message ListChatsResponse {
+  repeated Chat chats = 1;
+  messenger.common.v1.PageInfo page_info = 2;
+}

@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package messenger.bot.v1;
+
+option go_package = "github.com/example/messenger/proto/bot/v1;botv1";
+
+import "proto/common/types.proto";
+
+service BotService {
+  rpc CreateBot(CreateBotRequest) returns (CreateBotResponse);
+  rpc RotateToken(RotateTokenRequest) returns (RotateTokenResponse);
+}
+
+message CreateBotRequest {
+  int64 owner_user_id = 1;
+  string display_name = 2;
+}
+
+message CreateBotResponse {
+  int64 bot_id = 1;
+  string token = 2;
+}
+
+message RotateTokenRequest {
+  int64 bot_id = 1;
+}
+
+message RotateTokenResponse {
+  string token = 1;
+}

@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package messenger.auth.v1;
+
+option go_package = "github.com/example/messenger/proto/auth/v1;authv1";
+
+import "proto/common/types.proto";
+
+service AuthService {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc RefreshSession(RefreshSessionRequest) returns (RefreshSessionResponse);
+  rpc Logout(LogoutRequest) returns (messenger.common.v1.Empty);
+}
+
+message RegisterRequest {
+  string phone = 1;
+  string username = 2;
+  string password_hash = 3;
+}
+
+message RegisterResponse {
+  int64 user_id = 1;
+}
+
+message LoginRequest {
+  string login = 1;
+  string password_hash = 2;
+  string device_id = 3;
+}
+
+message LoginResponse {
+  int64 user_id = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+}
+
+message RefreshSessionRequest {
+  string refresh_token = 1;
+  string device_id = 2;
+}
+
+message RefreshSessionResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message LogoutRequest {
+  int64 user_id = 1;
+  string device_id = 2;
+}
