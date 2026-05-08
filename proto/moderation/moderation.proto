@@ -8,7 +8,7 @@ import "proto/common/types.proto";
 
 service ModerationService {
   rpc ReportMessage(ReportMessageRequest) returns (ReportMessageResponse);
-  rpc ApplyAction(ApplyActionRequest) returns (messenger.common.v1.Empty);
+  rpc ApplyAction(ApplyActionRequest) returns (ApplyActionResponse);
 }
 
 message ReportMessageRequest {
@@ -27,4 +27,8 @@ message ApplyActionRequest {
   int64 target_user_id = 2;
   string action = 3;
   string reason = 4;
+}
+
+message ApplyActionResponse {
+  bool success = 1;
 }
