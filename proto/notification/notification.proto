@@ -7,7 +7,7 @@ option go_package = "github.com/example/messenger/proto/notification/v1;notifica
 import "proto/common/types.proto";
 
 service NotificationService {
-  rpc SendPush(SendPushRequest) returns (messenger.common.v1.Empty);
+  rpc SendPush(SendPushRequest) returns (SendPushResponse);
 }
 
 message SendPushRequest {
@@ -16,4 +16,8 @@ message SendPushRequest {
   string title = 3;
   string body = 4;
   map<string, string> data = 5;
+}
+
+message SendPushResponse {
+  bool success = 1;
 }
