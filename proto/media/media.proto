@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package messenger.media.v1;
+
+option go_package = "github.com/example/messenger/proto/media/v1;mediav1";
+
+service MediaService {
+  rpc CreateUploadUrl(CreateUploadUrlRequest) returns (CreateUploadUrlResponse);
+  rpc CompleteUpload(CompleteUploadRequest) returns (CompleteUploadResponse);
+  rpc GetDownloadUrl(GetDownloadUrlRequest) returns (GetDownloadUrlResponse);
+}
+
+message CreateUploadUrlRequest {
+  int64 user_id = 1;
+  string content_type = 2;
+  uint64 size_bytes = 3;
+}
+
+message CreateUploadUrlResponse {
+  string upload_url = 1;
+  string object_key = 2;
+  int64 expires_in_seconds = 3;
+}
+
+message CompleteUploadRequest {
+  string object_key = 1;
+  string sha256 = 2;
+}
+
+message CompleteUploadResponse {
+  string attachment_id = 1;
+}
+
+message GetDownloadUrlRequest {
+  string object_key = 1;
+}
+
+message GetDownloadUrlResponse {
+  string download_url = 1;
+  int64 expires_in_seconds = 2;
+}

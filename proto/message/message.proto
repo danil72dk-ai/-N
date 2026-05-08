@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package messenger.message.v1;
+
+option go_package = "github.com/example/messenger/proto/message/v1;messagev1";
+
+import "proto/common/types.proto";
+
+service MessageService {
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
+  rpc GetMessages(GetMessagesRequest) returns (GetMessagesResponse);
+  rpc AckDelivery(AckDeliveryRequest) returns (messenger.common.v1.Empty);
+  rpc AckRead(AckReadRequest) returns (messenger.common.v1.Empty);
+}
+
+message Attachment {
+  string attachment_id = 1;
+  string content_type = 2;
+  string object_key = 3;
+  uint64 size_bytes = 4;
+}
+
+message Message {
+  string server_msg_id = 1;
+  string client_msg_id = 2;
+  int64 chat_id = 3;
+  int64 sender_user_id = 4;
+  string text = 5;
+  repeated Attachment attachments = 6;
+  messenger.common.v1.MessageStatus status = 7;
+  messenger.common.v1.Timestamp created_at = 8;
+}
+
+message SendMessageRequest {
+  int64 chat_id = 1;
+  int64 sender_user_id = 2;
+  string client_msg_id = 3;
+  string text = 4;
+  repeated Attachment attachments = 5;
+}
+
+message SendMessageResponse {
+  Message message = 1;
+}
+
+message GetMessagesRequest {
+  int64 chat_id = 1;
+  messenger.common.v1.Pagination pagination = 2;
+}
+
+message GetMessagesResponse {
+  repeated Message messages = 1;
+  messenger.common.v1.PageInfo page_info = 2;
+}
+
+message AckDeliveryRequest {
+  int64 chat_id = 1;
+  string server_msg_id = 2;
+  int64 user_id = 3;
+  int64 device_id = 4;
+}
+
+message AckReadRequest {
+  int64 chat_id = 1;
+  string server_msg_id = 2;
+  int64 user_id = 3;
+}
